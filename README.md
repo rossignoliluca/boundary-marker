@@ -44,6 +44,7 @@ All functions restricted to state signaling only. No operational output permitte
 |----------|---------|
 | `BIL_Template.md` | Template for second-order organizational layer |
 | `BIL_Specification.docx` | Field specification for all BIL components |
+| `GATE_SCHEMA.md` | Gate Runtime protocol specification |
 
 ### Purpose
 

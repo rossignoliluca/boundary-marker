@@ -21,6 +21,7 @@ Algorithm: SHA-256
 |------|---------|
 | BIL_Template.md | `73632cdf869739732e26ead3175d47e0e1b4f4f518cb94e4f87b8273b20bd77b` |
 | BIL_Specification.docx | `082b72e01a836658891240c926d00521268031f6087219b43034ad2635be5aee` |
+| GATE_SCHEMA.md | `c0a398595c44a42386492e640e0c1ae1c885d902da276a43ec085dafb81c6ee3` |
 
 ## Repository
 
