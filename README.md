@@ -70,6 +70,25 @@ Second Order = infrastructure (renders the law applicable)
 The BIL does not override, interpret, compensate, learn, generate content, or expand.
 
 ---
+### Theoretical Foundation (Revised)
+DocumentContentGate_v2_Theoretical_Foundation_REVISED.mdRevised foundation with honest claims and verifiable properties
+Key changes from v1:
+
+Definitions are design choices, not derivations from first principles
+Explicit honest limits (what cannot be verified)
+Known attack surfaces documented
+NULL interpreted as refusal to exercise unjustified power, not failure
+
+
+Benchmark Suite v2
+MetricValueExamples161LanguagesEN, IT, DE, FRAccuracy90.06%D1 FNR0.00%Fleiss' κ0.71 (Substantial Agreement)
+See benchmark/ for dataset and documentation.
+Safety-Critical Metric
+D1 False Negative Rate must be minimized:
+cost(false_negative_D1) >> cost(false_positive_D1)
+Current: 0% D1 FNR across all 4 languages.
+
+---
 
 ## Hash Freeze
 
