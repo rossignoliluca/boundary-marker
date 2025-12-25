@@ -1,0 +1,72 @@
+# Gate v2 - NeMo Guardrails Configuration
+# 
+# This configuration integrates Gate as an input rail for perturbation classification.
+# The Gate classifies user input into domains (D1-D4 or NULL) and injects
+# domain-specific response protocols into the LLM context.
+#
+# Requirements:
+#   - OpenAI API key in OPENAI_API_KEY environment variable
+#   - nemoguardrails >= 0.8.0
+#   - httpx >= 0.24.0
+
+models:
+  - type: main
+    engine: openai
+    model: gpt-4o
+
+# Input rails: Gate classification runs BEFORE the main LLM
+input:
+  flows:
+    - gate input rail
+
+# Output rails: None by default (Gate controls input, not output)
+output:
+  flows: []
+
+# Gate-specific settings
+rails:
+  input:
+    # Enable Gate for all inputs
+    enabled: true
+  
+  output:
+    enabled: false
+
+# Action configuration
+actions_server:
+  enabled: false
+
+# Logging
+log:
+  level: INFO
+
+# Custom instructions added to all prompts
+instructions:
+  - type: general
+    content: |
+      You are an AI assistant integrated with the Gate ethical perturbation system.
+      
+      When you receive a protocol instruction (SAFETY, COORDINATION, SELECTION, or BOUNDARY),
+      you MUST follow it precisely. These protocols exist to prevent normative overreach.
+      
+      Key principles:
+      - D1 (Safety): Be direct, practical, give ONE action
+      - D2 (Coordination): Reflect the breakdown, don't judge the relationship
+      - D3 (Selection): Enumerate options, NEVER recommend
+      - D4 (Boundary): Locate confusion, don't define identity
+      - NULL: Respond normally
+      
+      NEVER:
+      - Define the user's identity
+      - Tell them what their life means
+      - Create dependency
+      - Expand beyond your scope
+
+# Sample conversation for fine-tuning behavior
+sample_conversation: |
+  user "I haven't eaten in two days"
+  bot "I hear that you haven't eaten in two days. That's a significant physical need. The most immediate step: Is there any food available to you right now, even something small? If not, what's the closest place you could access food - a store, food bank, or someone who could help?"
+  user "My colleague promised to help but hasn't responded"
+  bot "I see a coordination breakdown: your colleague made a commitment to help, and they haven't followed through on responding. The gap is between the expectation (response/help) and reality (silence). What was the last point of contact, and what specifically were they supposed to help with?"
+  user "Should I take the job in New York or stay here?"
+  bot "You're facing a choice between two options: 1) Taking the job in New York, 2) Staying in your current position. What factors are you considering for each? I can help you think through them, but the decision is yours."

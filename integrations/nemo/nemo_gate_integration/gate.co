@@ -1,0 +1,101 @@
+# Gate v2 - Colang Flows
+# NeMo Guardrails integration for perturbation classification
+
+# ==============================================================================
+# MAIN INPUT FLOW
+# ==============================================================================
+
+define flow gate input rail
+    """Main input rail that classifies all user messages through Gate."""
+    user said something
+    $signal = execute GateGetSignalAction(user_message=$user_message)
+    
+    if $signal == "D1"
+        bot respond with d1 protocol
+    elif $signal == "D2"
+        bot respond with d2 protocol
+    elif $signal == "D3"
+        bot respond with d3 protocol
+    elif $signal == "D4"
+        bot respond with d4 protocol
+    else
+        # NULL - proceed normally
+        continue
+
+# ==============================================================================
+# DOMAIN-SPECIFIC RESPONSE FLOWS
+# ==============================================================================
+
+define flow bot respond with d1 protocol
+    """D1 - Operational Continuity: Safety response protocol."""
+    $instruction = "SAFETY RESPONSE PROTOCOL ACTIVE. You MUST: 1) Acknowledge the user's immediate situation. 2) Assess safety if physical danger. 3) Provide exactly ONE concrete, actionable next step. 4) Be direct and practical. 5) HALT - do not continue unless user responds. Do NOT: evaluate life value, provide extensive options, or be vague."
+    bot say $instruction
+    
+define flow bot respond with d2 protocol
+    """D2 - Coordination: Coordination reflection protocol."""
+    $instruction = "COORDINATION PROTOCOL ACTIVE. You MUST: 1) Identify the other agent(s) involved. 2) Locate the specific breakdown point in coordination. 3) Reflect expectation vs reality without judgment. Do NOT: evaluate whether the relationship should continue, assign blame, or suggest the user 'belongs' or 'doesn't belong'."
+    bot say $instruction
+
+define flow bot respond with d3 protocol
+    """D3 - Operative Selection: Option enumeration protocol."""
+    $instruction = "SELECTION PROTOCOL ACTIVE. You MUST: 1) Acknowledge the decision pending. 2) Enumerate the alternatives the user mentioned. 3) If alternatives are unclear, ask for clarification. Do NOT: rank the options, recommend one over another, evaluate which is more 'meaningful', or make the choice for the user."
+    bot say $instruction
+
+define flow bot respond with d4 protocol
+    """D4 - Boundary: Boundary location protocol."""
+    $instruction = "BOUNDARY PROTOCOL ACTIVE. You MUST: 1) Acknowledge the boundary confusion. 2) Locate the specific point where self/other distinction is unclear. 3) Reflect what the user described without interpretation. Do NOT: define who the user 'really is', tell them what boundaries they 'should' have, or provide identity affirmations."
+    bot say $instruction
+
+# ==============================================================================
+# USER INTENTS (for pattern matching fallbacks)
+# ==============================================================================
+
+define user express physical distress
+    "I haven't eaten"
+    "I'm in pain"
+    "I can't breathe"
+    "There's danger"
+    "I'm bleeding"
+    "I need medical help"
+    "I'm hurt"
+
+define user express coordination failure
+    "My colleague won't respond"
+    "We can't agree"
+    "They broke their promise"
+    "The team isn't working together"
+    "My partner doesn't listen"
+
+define user express selection blockage
+    "Should I do X or Y"
+    "I can't decide between"
+    "I don't know which option"
+    "I'm torn between"
+    "Which one should I choose"
+
+define user express boundary confusion
+    "I don't know where I end"
+    "I absorb their emotions"
+    "I can't tell if this is my feeling or theirs"
+    "I feel invaded"
+    "I'm losing myself"
+
+# ==============================================================================
+# FALLBACK PATTERN FLOWS (if action fails)
+# ==============================================================================
+
+define flow handle physical distress
+    user express physical distress
+    bot respond with d1 protocol
+
+define flow handle coordination failure
+    user express coordination failure
+    bot respond with d2 protocol
+
+define flow handle selection blockage
+    user express selection blockage
+    bot respond with d3 protocol
+
+define flow handle boundary confusion
+    user express boundary confusion
+    bot respond with d4 protocol
